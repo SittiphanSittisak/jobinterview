@@ -8,6 +8,7 @@ import 'package:instagram_app/view/sign_in_page/widget/language_selection_widget
 import 'package:instagram_app/view/sign_in_page/widget/password_field_widget_sign_in_page.dart';
 import 'package:instagram_app/view/sign_in_page/widget/sign_in_button_widget_sign_in_page.dart';
 import 'package:instagram_app/view/sign_in_page/widget/sign_in_by_facebook_button_widget_sign_in_page.dart';
+import 'package:instagram_app/view/sign_in_page/widget/sign_up_widget_sign_in_page.dart';
 import 'package:instagram_app/view/sign_in_page/widget/username_field_widget_sign_in_page.dart';
 
 class SignInPage extends StatefulWidget {
@@ -30,17 +31,7 @@ class _SignInPageState extends State<SignInPage> {
     text: 'ลืมรหัสผ่านใช่ไหม',
     color: const Color(0xFF99C6EC),
   );
-  final _registerTextWidget = const Text(
-    'หากยังไม่มีบัญชี',
-    style: TextStyle(color: Color(0xFFE5EDE7), fontSize: 15),
-  );
-  final _registerButtonWidget = TextButtonBlinkingCustomWidget(
-    onTap: () {},
-    text: 'สมัครใช้งาน',
-    color: const Color(0xFF0080DE),
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-  );
+  final _signUpWidget = const SignUpWidgetSignInPage();
   final _installAppTextWidget = const Text(
     'ติดตั้งแอพ',
     style: TextStyle(color: Color(0xFFE5EDE7), fontSize: 16),
@@ -76,7 +67,7 @@ class _SignInPageState extends State<SignInPage> {
   );
 
   //complex widget
-  late final _signInWidget = Column(
+  late final _signInComplexWidget = Column(
     children: [
       const SizedBox(height: 30),
       SizedBox(width: 200, child: _logoButtonWidget),
@@ -100,18 +91,20 @@ class _SignInPageState extends State<SignInPage> {
       _forgotPasswordWidget,
     ],
   );
-  late final _registerWidget = Column(
-    children: [
-      Wrap(
-        spacing: 2.5,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          _registerTextWidget,
-          _registerButtonWidget,
-        ],
-      )
-    ],
-  );
+  late final _downLoadAppComplexWidget = [
+    _installAppTextWidget,
+    const SizedBox(height: 10),
+    Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 10,
+      runSpacing: 10,
+      children: [
+        SizedBox(height: 40, child: _downloadFromGooglePlayButtonWidget),
+        SizedBox(height: 40, child: _downloadFromMicrosoftButtonWidget),
+      ],
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -130,25 +123,17 @@ class _SignInPageState extends State<SignInPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                         width: 350,
                         decoration: BoxDecoration(border: Border.all(color: const Color(0xFF282828))),
-                        child: _signInWidget,
+                        child: _signInComplexWidget,
                       ),
                       const SizedBox(height: 10),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                         width: 350,
                         decoration: BoxDecoration(border: Border.all(color: const Color(0xFF282828))),
-                        child: _registerWidget,
+                        child: _signUpWidget,
                       ),
                       const SizedBox(height: 20),
-                      _installAppTextWidget,
-                      const SizedBox(height: 10),
-                      Wrap(
-                        spacing: 10,
-                        children: [
-                          SizedBox(height: 40, child: _downloadFromGooglePlayButtonWidget),
-                          SizedBox(height: 40, child: _downloadFromMicrosoftButtonWidget),
-                        ],
-                      ),
+                      ..._downLoadAppComplexWidget,
                       const SizedBox(height: 80),
                     ],
                   );
@@ -171,20 +156,12 @@ class _SignInPageState extends State<SignInPage> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                           width: 350,
-                          child: _signInWidget,
+                          child: _signInComplexWidget,
                         ),
                         const SizedBox(height: 40),
-                        SizedBox(width: 350, child: _registerWidget),
+                        SizedBox(width: 350, child: _signUpWidget),
                         const SizedBox(height: 40),
-                        _installAppTextWidget,
-                        const SizedBox(height: 10),
-                        Wrap(
-                          spacing: 10,
-                          children: [
-                            SizedBox(height: 40, child: _downloadFromGooglePlayButtonWidget),
-                            SizedBox(height: 40, child: _downloadFromMicrosoftButtonWidget),
-                          ],
-                        ),
+                        ..._downLoadAppComplexWidget,
                         const SizedBox(height: 80),
                       ],
                     );
@@ -199,7 +176,7 @@ class _SignInPageState extends State<SignInPage> {
                   children: _footerMenuButtonWidgetList,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Center(
                 child: Wrap(
                   alignment: WrapAlignment.center,

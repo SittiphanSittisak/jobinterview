@@ -11,19 +11,16 @@ class _SignInButtonWidgetSignInPageState extends State<SignInButtonWidgetSignInP
   //controller
   bool _isLoading = false;
 
-  void _handleSignIn() {
-    setState(() {
-      _isLoading = true;
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() => _isLoading = false);
-      });
-    });
+  Future _onClick() async {
+    if (_isLoading) return;
+    setState(() => _isLoading = true);
+    setState(() => _isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: _isLoading ? null : _handleSignIn,
+      onPressed: _isLoading ? null : _onClick,
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF056EB2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),

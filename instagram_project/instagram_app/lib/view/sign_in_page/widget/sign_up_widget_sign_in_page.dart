@@ -1,19 +1,19 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class SignInWidgetSignUpPage extends StatelessWidget {
-  const SignInWidgetSignUpPage({super.key});
+class SignUpWidgetSignInPage extends StatelessWidget {
+  const SignUpWidgetSignInPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Text.rich(
       textAlign: TextAlign.center,
       TextSpan(
-        text: 'มีบัญชีผู้ใช้แล้ว? ',
+        text: 'หากยังไม่มีบัญชี ',
         children: [
           TextSpan(
             recognizer: TapGestureRecognizer()..onTap = () {},
-            text: 'เข้าสู่ระบบ',
+            text: 'สมัครใช้งาน',
             style: const TextStyle(
               color: Color(0xFF0080DE),
               fontSize: 16,

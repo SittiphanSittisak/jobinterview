@@ -112,7 +112,10 @@ class _SignUpPageState extends State<SignUpPage> {
     _installAppTextWidget,
     const SizedBox(height: 10),
     Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       spacing: 10,
+      runSpacing: 10,
       children: [
         SizedBox(height: 40, child: _downloadFromGooglePlayButtonWidget),
         SizedBox(height: 40, child: _downloadFromMicrosoftButtonWidget),
@@ -130,46 +133,28 @@ class _SignUpPageState extends State<SignUpPage> {
             children: [
               LayoutBuilder(
                 builder: (context, constraints) {
-                  if (constraints.maxWidth > 400) {
-                    return Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(10),
-                          padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
-                          width: 350,
-                          decoration: BoxDecoration(border: Border.all(color: const Color(0xFF282828))),
-                          child: _signUpComplexWidget,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
-                          width: 350,
-                          decoration: BoxDecoration(border: Border.all(color: const Color(0xFF282828))),
-                          child: _signInWidget,
-                        ),
-                        const SizedBox(height: 20),
-                        ..._downLoadAppComplexWidget,
-                        const SizedBox(height: 80),
-                      ],
-                    );
-                  } else {
-                    return Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
-                          width: 350,
-                          child: _signUpComplexWidget,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
-                          width: 350,
-                          child: _signInWidget,
-                        ),
-                        const SizedBox(height: 20),
-                        ..._downLoadAppComplexWidget,
-                        const SizedBox(height: 80),
-                      ],
-                    );
-                  }
+                  final cardDecoration = constraints.maxWidth > 400 ? BoxDecoration(border: Border.all(color: const Color(0xFF282828))) : null;
+
+                  return Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                        width: 350,
+                        decoration: cardDecoration,
+                        child: _signUpComplexWidget,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                        width: 350,
+                        decoration: cardDecoration,
+                        child: _signInWidget,
+                      ),
+                      const SizedBox(height: 20),
+                      ..._downLoadAppComplexWidget,
+                      const SizedBox(height: 80),
+                    ],
+                  );
                 },
               ),
               Center(

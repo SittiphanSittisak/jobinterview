@@ -40,9 +40,7 @@ class _PasswordFieldWidgetSignUpPageState extends State<PasswordFieldWidgetSignU
                   _isObscured ? Icons.visibility : Icons.visibility_off,
                   color: const Color(0xFF949393),
                 ),
-                onPressed: () {
-                  setState(() => _isObscured = !_isObscured);
-                },
+                onPressed: () => setState(() => _isObscured = !_isObscured),
               )
             : null,
         hintText: _hintText,

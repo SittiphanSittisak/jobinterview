@@ -11,6 +11,13 @@ class SignInByFacebookButtonWidgetSignInPage extends StatefulWidget {
 class _SignInByFacebookButtonWidgetSignInPageState extends State<SignInByFacebookButtonWidgetSignInPage> {
   //controller
   bool _isTapping = false;
+  bool _isLoading = false;
+
+  Future _onClick() async {
+    if (_isLoading) return;
+    setState(() => _isLoading = true);
+    setState(() => _isLoading = false);
+  }
 
   //widget property
   final _iconColor = const Color(0xFFB2B6C4);
@@ -29,14 +36,19 @@ class _SignInByFacebookButtonWidgetSignInPageState extends State<SignInByFaceboo
       onTapDown: (tapUpDetails) => setState(() => _isTapping = true),
       onTapUp: (tapUpDetails) => setState(() => _isTapping = false),
       onTapCancel: () => setState(() => _isTapping = false),
-      onTap: () {},
-      child: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 10,
-        children: [
-          FaIcon(FontAwesomeIcons.squareFacebook, color: iconColor),
-          Text('เข้าสู่ระบบด้วย Facebook', style: TextStyle(color: textColor)),
-        ],
+      onTap: _onClick,
+      child: Text.rich(
+        textAlign: TextAlign.center,
+        TextSpan(
+          children: [
+            WidgetSpan(child: FaIcon(FontAwesomeIcons.squareFacebook, color: iconColor), alignment: PlaceholderAlignment.middle),
+            const WidgetSpan(child: SizedBox(width: 10)),
+            TextSpan(
+              text: "เข้าสู่ระบบด้วย Facebook",
+              style: TextStyle(color: textColor),
+            ),
+          ],
+        ),
       ),
     );
   }
