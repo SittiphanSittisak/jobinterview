@@ -1,15 +1,13 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:instagram_app/_lib/asset/image_asset.dart';
+import 'package:instagram_app/_lib/custom_widget/button_custom_widget.dart';
+import 'package:instagram_app/_lib/custom_widget/field_custom_widget.dart';
 import 'package:instagram_app/_lib/custom_widget/image_custom_widget.dart';
 import 'package:instagram_app/_lib/custom_widget/text_button_blinking_custom_widget.dart';
-import 'package:instagram_app/view/sign_in_page/builder_widget/footer_menu_builder_widget_sign_in_page.dart';
+import 'package:instagram_app/view/_share/widget/footer_before_sign_in_share_widget.dart';
 import 'package:instagram_app/view/sign_in_page/widget/example_app_image_widget_sign_in_page.dart';
-import 'package:instagram_app/view/sign_in_page/widget/language_selection_widget_sign_in_page.dart';
-import 'package:instagram_app/view/sign_in_page/widget/password_field_widget_sign_in_page.dart';
-import 'package:instagram_app/view/sign_in_page/widget/sign_in_button_widget_sign_in_page.dart';
-import 'package:instagram_app/view/sign_in_page/widget/sign_in_by_facebook_button_widget_sign_in_page.dart';
-import 'package:instagram_app/view/sign_in_page/widget/sign_up_widget_sign_in_page.dart';
-import 'package:instagram_app/view/sign_in_page/widget/username_field_widget_sign_in_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -19,19 +17,80 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  //widget property
+  final _fieldTextStyle = const TextStyle(color: Color.fromRGBO(149, 149, 149, 1), fontSize: 12.5);
+  final _fieldTextBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(4),
+    borderSide: const BorderSide(color: Color.fromRGBO(51, 51, 51, 1)),
+  );
+
   //basic widget
   final _logoButtonWidget = InkWell(
     onTap: () {},
     child: const ImageCustomWidget(image: ImageAsset.logo, imageColor: Colors.white),
   );
+  late final _usernameFieldWidget = FieldCustomWidget(
+    onChange: (value) {},
+    hintText: 'ชื่อผู้ใช้ หรืออีเมล',
+    hintStyle: _fieldTextStyle,
+    borderRadius: _fieldTextBorder,
+  );
+  late final _passwordFieldWidget = FieldCustomWidget(
+    onChange: (value) {},
+    hintText: 'รหัสผ่าน',
+    useObscured: true,
+    hintStyle: _fieldTextStyle,
+    borderRadius: _fieldTextBorder,
+  );
+  final _signInButtonWidget = ButtonCustomWidget(
+    onClick: () {},
+    text: 'เข้าสู่ระบบ',
+  );
   final _dividerWidget = const Expanded(child: Divider(color: Color(0xFF323232)));
-  final _signInChoiceWidget = const Text('หรือ', style: TextStyle(color: Color(0xFF8B929B)));
+  final _orTextWidget = const Text(
+    'หรือ',
+    style: TextStyle(
+      color: Color.fromRGBO(149, 149, 149, 1),
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+    ),
+  );
+  final _signInByFacebookButtonWidget = TextButtonBlinkingCustomWidget(
+    onTap: () {},
+    text: 'เข้าสู่ระบบด้วย Facebook',
+    prefixIcon: FontAwesomeIcons.squareFacebook,
+    isBlinkWhenHover: false,
+    textColor: const Color.fromRGBO(165, 186, 246, 1),
+    iconColor: const Color.fromRGBO(227, 232, 251, 1),
+    fontSize: 15,
+    iconSize: 20,
+    fontWeight: FontWeight.bold,
+  );
   final _forgotPasswordWidget = TextButtonBlinkingCustomWidget(
     onTap: () {},
     text: 'ลืมรหัสผ่านใช่ไหม',
-    color: const Color(0xFF99C6EC),
+    isBlinkWhenHover: false,
+    textColor: const Color.fromRGBO(191, 220, 255, 1),
+    fontSize: 13,
   );
-  final _signUpWidget = const SignUpWidgetSignInPage();
+  final _signUpWidget = Text.rich(
+    TextSpan(
+      text: 'หากยังไม่มีบัญชี ',
+      children: [
+        TextSpan(
+          recognizer: TapGestureRecognizer()..onTap = () {},
+          text: 'สมัครใช้งาน',
+          style: const TextStyle(
+            color: Color.fromRGBO(0, 128, 222, 1),
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
+    textAlign: TextAlign.center,
+    style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1), fontSize: 15),
+  );
   final _installAppTextWidget = const Text(
     'ติดตั้งแอพ',
     style: TextStyle(color: Color(0xFFE5EDE7), fontSize: 16),
@@ -45,48 +104,29 @@ class _SignInPageState extends State<SignInPage> {
     child: const ImageCustomWidget(image: ImageAsset.downloadFromMicrosoft),
   );
   final _exampleAppImageWidget = const ExampleAppImageWidgetSignInPage();
-  final _footerMenuButtonWidgetList = [
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'Meta'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'เกี่ยวกับ'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'บล็อก'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'งาน'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'ความช่วยเหลือ'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'API'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'ความเป็นส่วนตัว'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'ข้อกำหนด'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'ตำแหน่ง'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'Instagram Lite'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'Threads'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'การอัพโหลดผู้ติดต่อและผู้ที่ไม่ได้ใช้บริการ'),
-    FooterMenuBuilderWidgetSignInPage(onTap: () {}, text: 'Meta Verified'),
-  ];
-  final languageSelectionWidget = const LanguageSelectionWidgetSignInPage();
-  final _creditWidget = const Text(
-    '© 2024 Instagram from Meta',
-    style: TextStyle(color: Color(0xFF959584), fontSize: 13),
-  );
+  final _footerWidget = const FooterBeforeSignInShareWidget();
 
   //complex widget
   late final _signInComplexWidget = Column(
     children: [
       const SizedBox(height: 30),
-      SizedBox(width: 200, child: _logoButtonWidget),
-      const SizedBox(height: 40),
-      const UsernameFieldWidgetSignInPage(),
+      SizedBox(width: 180, child: _logoButtonWidget),
+      const SizedBox(height: 35),
+      _usernameFieldWidget,
       const SizedBox(height: 5),
-      const PasswordFieldWidgetSignInPage(),
+      _passwordFieldWidget,
       const SizedBox(height: 20),
-      const SignInButtonWidgetSignInPage(),
+      _signInButtonWidget,
       const SizedBox(height: 25),
       Row(
         children: [
           _dividerWidget,
-          Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: _signInChoiceWidget),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: _orTextWidget),
           _dividerWidget,
         ],
       ),
       const SizedBox(height: 30),
-      const SignInByFacebookButtonWidgetSignInPage(),
+      _signInByFacebookButtonWidget,
       const SizedBox(height: 20),
       _forgotPasswordWidget,
     ],
@@ -168,27 +208,7 @@ class _SignInPageState extends State<SignInPage> {
                   }
                 },
               ),
-              Center(
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 20,
-                  runSpacing: 4,
-                  children: _footerMenuButtonWidgetList,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Center(
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.end,
-                  spacing: 20,
-                  runSpacing: 4,
-                  children: [
-                    languageSelectionWidget,
-                    _creditWidget,
-                  ],
-                ),
-              ),
+              _footerWidget,
               const SizedBox(height: 50),
             ],
           ),

@@ -1,17 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:instagram_app/_lib/asset/image_asset.dart';
+import 'package:instagram_app/_lib/custom_widget/button_custom_widget.dart';
+import 'package:instagram_app/_lib/custom_widget/field_custom_widget.dart';
 import 'package:instagram_app/_lib/custom_widget/image_custom_widget.dart';
-import 'package:instagram_app/view/sign_up_page/builder_widget/footer_menu_builder_widget_sign_up_page.dart';
-import 'package:instagram_app/view/sign_up_page/widget/email_field_widget_sign_up_page.dart';
-import 'package:instagram_app/view/sign_up_page/widget/language_selection_widget_sign_up_page.dart';
-import 'package:instagram_app/view/sign_up_page/widget/more_info_widget_sign_up_page.dart';
-import 'package:instagram_app/view/sign_up_page/widget/name_field_widget_sign_up_page.dart';
-import 'package:instagram_app/view/sign_up_page/widget/password_field_widget_sign_up_page.dart';
-import 'package:instagram_app/view/sign_up_page/widget/policy_widget_sign_up_page.dart';
-import 'package:instagram_app/view/sign_up_page/widget/sign_in_by_facebook_button_widget_sign_up_page.dart';
-import 'package:instagram_app/view/sign_up_page/widget/sign_in_widget_sign_up_page.dart';
-import 'package:instagram_app/view/sign_up_page/widget/sign_up_button_widget_sign_up_page.dart';
-import 'package:instagram_app/view/sign_up_page/widget/username_field_widget_sign_up_page.dart';
+import 'package:instagram_app/view/_share/widget/footer_before_sign_in_share_widget.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -21,6 +15,17 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  //widget property
+  final _fieldTextStyle = const TextStyle(color: Color.fromRGBO(149, 149, 149, 1), fontSize: 13);
+  final _fieldTextBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(4),
+    borderSide: const BorderSide(color: Color.fromRGBO(51, 51, 51, 1)),
+  );
+  final _infoTextStyle = const TextStyle(color: Color.fromRGBO(149, 149, 149, 1), fontSize: 13);
+  final _infoLinkStyle = const TextStyle(color: Color.fromRGBO(191, 220, 255, 1), fontSize: 13);
+  final _policyTextStyle = const TextStyle(color: Color.fromRGBO(149, 149, 149, 1), fontSize: 13);
+  final _policyLinkStyle = const TextStyle(color: Color.fromRGBO(191, 220, 255, 1), fontSize: 13);
+
   //basic widget
   final _logoButtonWidget = InkWell(
     onTap: () {},
@@ -31,16 +36,106 @@ class _SignUpPageState extends State<SignUpPage> {
     textAlign: TextAlign.center,
     style: TextStyle(
       color: Color.fromRGBO(149, 149, 149, 1),
-      fontSize: 21,
+      fontSize: 17,
       fontWeight: FontWeight.bold,
     ),
   );
-  final _dividerWidget = const Expanded(child: Divider(color: Color(0xFF323232)));
-  final _signInChoiceWidget = const Text(
-    'หรือ',
-    style: TextStyle(color: Color(0xFF8B929B), fontWeight: FontWeight.bold),
+  final _signInByFacebookButtonWidget = ButtonCustomWidget(
+    onClick: () {},
+    text: 'เข้าสู่ระบบด้วย Facebook',
+    prefixIcon: FontAwesomeIcons.squareFacebook,
   );
-  final _signInWidget = const SignInWidgetSignUpPage();
+  final _dividerWidget = const Expanded(child: Divider(color: Color(0xFF323232)));
+  final _orTextWidget = const Text(
+    'หรือ',
+    style: TextStyle(
+      color: Color.fromRGBO(149, 149, 149, 1),
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+    ),
+  );
+  late final _emailFieldWidget = FieldCustomWidget(
+    onChange: (value) {},
+    hintText: 'อีเมล',
+    hintStyle: _fieldTextStyle,
+    borderRadius: _fieldTextBorder,
+  );
+  late final _fullNameFieldWidget = FieldCustomWidget(
+    onChange: (value) {},
+    hintText: 'ชื่อและนามสกุล',
+    hintStyle: _fieldTextStyle,
+    borderRadius: _fieldTextBorder,
+  );
+  late final _usernameFieldWidget = FieldCustomWidget(
+    onChange: (value) {},
+    hintText: 'ชื่อผู้ใช้',
+    hintStyle: _fieldTextStyle,
+    borderRadius: _fieldTextBorder,
+  );
+  late final _passwordFieldWidget = FieldCustomWidget(
+    onChange: (value) {},
+    hintText: 'รหัสผ่าน',
+    hintStyle: _fieldTextStyle,
+    borderRadius: _fieldTextBorder,
+  );
+  late final _moreInfoWidget = Text.rich(
+    TextSpan(
+      text: 'คนที่ใช้บริการของเราอาจอัพโหลดข้อมูลติดต่อของคุณไปยัง Instagram ',
+      children: [
+        TextSpan(
+          recognizer: TapGestureRecognizer()..onTap = () {},
+          text: 'เรียนรู้เพิ่มเติม',
+          style: _infoLinkStyle,
+        ),
+      ],
+    ),
+    textAlign: TextAlign.center,
+    style: _infoTextStyle,
+  );
+  late final _policyWidget = Text.rich(
+    TextSpan(
+      text: 'เมื่อสมัครใช้งาน แสดงว่าคุณยินยอมตาม',
+      children: [
+        TextSpan(
+          recognizer: TapGestureRecognizer()..onTap = () {},
+          text: 'ข้อกำหนด นโยบายความเป็นส่วนตัว',
+          style: _policyLinkStyle,
+        ),
+        const TextSpan(text: ' และ'),
+        TextSpan(
+          recognizer: TapGestureRecognizer()..onTap = () {},
+          text: 'นโยบายคุกกี้',
+          style: _policyLinkStyle,
+        ),
+        const TextSpan(text: 'ของเรา'),
+      ],
+    ),
+    textAlign: TextAlign.center,
+    style: _policyTextStyle,
+  );
+  final _signUpButtonWidget = ButtonCustomWidget(
+    onClick: () {},
+    text: 'สมัครใช้งาน',
+  );
+  final _signInWidget = Text.rich(
+    TextSpan(
+      text: 'มีบัญชีผู้ใช้แล้ว? ',
+      children: [
+        TextSpan(
+          recognizer: TapGestureRecognizer()..onTap = () {},
+          text: 'เข้าสู่ระบบ',
+          style: const TextStyle(
+            color: Color.fromRGBO(0, 128, 222, 1),
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+      style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1), fontSize: 14),
+    ),
+    textAlign: TextAlign.center,
+    style: const TextStyle(color: Color(0xFFE5EDE7), fontSize: 14),
+  );
   final _installAppTextWidget = const Text(
     'ติดตั้งแอพ',
     style: TextStyle(color: Color(0xFFE5EDE7), fontSize: 16),
@@ -53,58 +148,39 @@ class _SignUpPageState extends State<SignUpPage> {
     onTap: () {},
     child: const ImageCustomWidget(image: ImageAsset.downloadFromMicrosoft),
   );
-  final _footerMenuButtonWidgetList = [
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'Meta'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'เกี่ยวกับ'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'บล็อก'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'งาน'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'ความช่วยเหลือ'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'API'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'ความเป็นส่วนตัว'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'ข้อกำหนด'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'ตำแหน่ง'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'Instagram Lite'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'Threads'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'การอัพโหลดผู้ติดต่อและผู้ที่ไม่ได้ใช้บริการ'),
-    FooterMenuBuilderWidgetSignUpPage(onTap: () {}, text: 'Meta Verified'),
-  ];
-  final languageSelectionWidget = const LanguageSelectionWidgetSignUpPage();
-  final _creditWidget = const Text(
-    '© 2024 Instagram from Meta',
-    style: TextStyle(color: Color(0xFF959584), fontSize: 13),
-  );
+  final _footerWidget = const FooterBeforeSignInShareWidget();
 
   //complex widget
   late final _signUpComplexWidget = Column(
     children: [
       const SizedBox(height: 30),
-      SizedBox(width: 200, child: _logoButtonWidget),
+      SizedBox(width: 180, child: _logoButtonWidget),
       const SizedBox(height: 15),
       _titleTextWidget,
       const SizedBox(height: 15),
-      const SignInByFacebookButtonWidgetSignUpPage(),
+      _signInByFacebookButtonWidget,
       const SizedBox(height: 15),
       Row(
         children: [
           _dividerWidget,
-          Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: _signInChoiceWidget),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 15), child: _orTextWidget),
           _dividerWidget,
         ],
       ),
       const SizedBox(height: 15),
-      const EmailFieldWidgetSignUpPage(),
+      _emailFieldWidget,
       const SizedBox(height: 5),
-      const NameFieldWidgetSignUpPage(),
+      _fullNameFieldWidget,
       const SizedBox(height: 5),
-      const UsernameFieldWidgetSignUpPage(),
+      _usernameFieldWidget,
       const SizedBox(height: 5),
-      const PasswordFieldWidgetSignUpPage(),
+      _passwordFieldWidget,
       const SizedBox(height: 20),
-      const MoreInfoWidgetSignUpPage(),
+      _moreInfoWidget,
       const SizedBox(height: 15),
-      const PolicyWidgetSignUpPage(),
-      const SizedBox(height: 10),
-      const SignUpButtonWidgetSignUpPage(),
+      _policyWidget,
+      const SizedBox(height: 15),
+      _signUpButtonWidget,
       const SizedBox(height: 20),
     ],
   );
@@ -157,27 +233,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   );
                 },
               ),
-              Center(
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 20,
-                  runSpacing: 4,
-                  children: _footerMenuButtonWidgetList,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Center(
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.end,
-                  spacing: 20,
-                  runSpacing: 4,
-                  children: [
-                    languageSelectionWidget,
-                    _creditWidget,
-                  ],
-                ),
-              ),
+              _footerWidget,
               const SizedBox(height: 50),
             ],
           ),

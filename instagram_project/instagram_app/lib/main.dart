@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:instagram_app/_lib/asset/font_asset.dart';
-import 'package:instagram_app/view/reset_password_page/reset_password_page.dart';
-import 'package:instagram_app/view/sign_in_page/sign_in_page.dart';
-import 'package:instagram_app/view/sign_up_page/sign_up_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Instagram',
       theme: ThemeData(
         brightness: Brightness.light,
+        colorScheme: const ColorScheme.light(),
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         hoverColor: Colors.transparent,
@@ -31,6 +28,7 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
+        colorScheme: const ColorScheme.dark(),
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         hoverColor: Colors.transparent,
@@ -43,7 +41,6 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: const ResetPasswordPage(),
     );
   }
 }
