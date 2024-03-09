@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_app/_lib/asset/font_asset.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
         hoverColor: Colors.transparent,
         focusColor: Colors.transparent,
+        fontFamily: FontAsset.customFont,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
         hoverColor: Colors.transparent,
         focusColor: Colors.transparent,
+        fontFamily: FontAsset.customFont,
       ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
