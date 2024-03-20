@@ -1,0 +1,1 @@
+instagram_project: instagram_app -> add navigationBarShareWidget view (tried NavigationRail) = https://youtu.be/pk9lGWCh9KU
