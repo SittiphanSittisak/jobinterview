@@ -11,12 +11,13 @@ class NavigationBarShareWidget extends StatefulWidget {
 }
 
 class _NavigationBarShareWidgetState extends State<NavigationBarShareWidget> {
-  //basic widget
-  final _instagramMenuWidget = const _MenuBuilderWidget(name: 'Instagram', child: Icon(FontAwesomeIcons.instagram));
-  final _profileMenuWidget = const _MenuBuilderWidget(
-    name: 'โปรไฟล์',
-    child: ClipOval(child: SizedBox(width: 25, child: ImageCustomWidget(image: ImageAsset.defaultProfile))),
-  );
+  int _selectedIndex = 0;
+  NavigationRailLabelType labelType = NavigationRailLabelType.none;
+  bool showLeading = false;
+  bool showTrailing = false;
+  double groupAlignment = -1.0;
+
+  final _profileMenuWidget = const ClipOval(child: SizedBox(width: 25, child: ImageCustomWidget(image: ImageAsset.defaultProfile)));
   late final _menuWidgetList = [
     (name: 'หน้าหลัก', unselectedIcon: Icons.home_outlined, selectedIcon: Icons.home_sharp),
     (name: 'ค้นหา', unselectedIcon: Icons.search_outlined, selectedIcon: Icons.search_sharp),
@@ -25,106 +26,67 @@ class _NavigationBarShareWidgetState extends State<NavigationBarShareWidget> {
     (name: 'ข้อความ', unselectedIcon: FontAwesomeIcons.message, selectedIcon: FontAwesomeIcons.solidMessage),
     (name: 'การแจ้งเตือน', unselectedIcon: Icons.notifications_outlined, selectedIcon: Icons.notifications_sharp),
     (name: 'สร้าง', unselectedIcon: Icons.add_box_outlined, selectedIcon: Icons.add_box_sharp),
-  ].map((e) => _MenuBuilderWidget(name: e.name, child: Icon(e.unselectedIcon))).toList();
-  final _threadsMenuWidget = const _MenuBuilderWidget(name: 'Threads', child: Icon(FontAwesomeIcons.threads));
-  final _moreMenuWidget = const _MenuBuilderWidget(name: 'เพิ่มเติม', child: Icon(Icons.menu_outlined));
+  ].map((e) {
+    const iconHeight = 70.0;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 70,
-      decoration: const BoxDecoration(border: Border(right: BorderSide(width: 1.0, color: Color.fromRGBO(38, 38, 38, 1)))),
-      child: ScrollConfiguration(
-        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-        child: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 25),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        _instagramMenuWidget,
-                        const SizedBox(height: 20),
-                        ..._menuWidgetList,
-                        _profileMenuWidget,
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        _threadsMenuWidget,
-                        _moreMenuWidget,
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+    return NavigationRailDestination(
+      icon: Tooltip(
+        message: e.name,
+        child: Container(alignment: Alignment.center, height: iconHeight, child: Icon(e.unselectedIcon)),
       ),
+      selectedIcon: Tooltip(
+        message: e.name,
+        child: Container(alignment: Alignment.center, height: iconHeight, child: Icon(e.selectedIcon)),
+      ),
+      label: Text(e.name),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
     );
-  }
-}
-
-class _MenuBuilderWidget extends StatefulWidget {
-  final String name;
-  final Widget child;
-
-  const _MenuBuilderWidget({required this.name, required this.child});
-
-  @override
-  State<_MenuBuilderWidget> createState() => _MenuBuilderWidgetState();
-}
-
-class _MenuBuilderWidgetState extends State<_MenuBuilderWidget> {
-  //controller
-  bool _isLoading = false;
-  bool? _isTapping = false;
-
-  Future _setTapping(bool? isTapping) async {
-    if (_isTapping == null) return;
-    if (isTapping == null) {
-      //on click
-      if (_isTapping != true) setState(() => _isTapping = true);
-      _isTapping = null;
-      await Future.delayed(const Duration(milliseconds: 100));
-      setState(() => _isTapping = false);
-    } else {
-      //on tap up/down/cancel
-      if (isTapping == _isTapping) return;
-      setState(() => _isTapping = isTapping);
-    }
-  }
-
-  Future _onClick() async {
-    if (_isLoading) return;
-    _setTapping(null);
-    _isLoading = true;
-
-    _isLoading = false;
-  }
+  }).toList()
+    ..add(NavigationRailDestination(
+      icon: _profileMenuWidget,
+      selectedIcon: _profileMenuWidget,
+      label: const Text('โปรไฟล์'),
+    ));
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: GestureDetector(
-        onTapDown: (tapUpDetails) => _setTapping(true),
-        onTapUp: (tapUpDetails) => _setTapping(false),
-        onTapCancel: () => _setTapping(false),
-        child: IconButton(
-          onPressed: _onClick,
-          tooltip: widget.name,
-          icon: Transform.scale(scale: (_isTapping ?? true) ? 0.9 : 1.0, child: widget.child),
-          iconSize: 25,
-          padding: const EdgeInsets.all(10),
-          style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
-        ),
+    return Theme(
+      data: ThemeData(
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        focusColor: Colors.transparent,
+        splashFactory: NoSplash.splashFactory,
+      ),
+      child: NavigationRail(
+        selectedIndex: _selectedIndex,
+        labelType: labelType,
+        groupAlignment: groupAlignment,
+        onDestinationSelected: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        leading: showLeading
+            ? FloatingActionButton(
+                elevation: 0,
+                onPressed: () {
+                  // Add your onPressed code here!
+                },
+                child: const Icon(Icons.add),
+              )
+            : const SizedBox(),
+        trailing: showTrailing
+            ? IconButton(
+                onPressed: () {
+                  // Add your onPressed code here!
+                },
+                icon: const Icon(Icons.more_horiz_rounded),
+              )
+            : const SizedBox(),
+        destinations: _menuWidgetList,
+        minWidth: 70,
+        indicatorShape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
       ),
     );
   }
