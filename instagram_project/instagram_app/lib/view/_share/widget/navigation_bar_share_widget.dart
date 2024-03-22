@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:instagram_app/_lib/asset/image_asset.dart';
+import 'package:instagram_app/_lib/custom_widget/custom_single_child_scroll_view_widget.dart';
 import 'package:instagram_app/_lib/custom_widget/image_button_blinking_custom_widget.dart';
 import 'package:instagram_app/_lib/custom_widget/image_custom_widget.dart';
+import 'package:instagram_app/_lib/custom_widget/search_picker_field_custom_widget.dart';
 
 class NavigationBarShareWidget extends StatefulWidget {
   final Widget? child;
@@ -41,79 +43,71 @@ class _NavigationBarShareWidgetState extends State<NavigationBarShareWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       //widget property
-      const boxDecoration = BoxDecoration(border: Border(right: BorderSide(width: 1.0, color: Color.fromRGBO(38, 38, 38, 1))));
+      const borderSide = BorderSide(width: 1.0, color: Color.fromRGBO(38, 38, 38, 1));
 
       if (constraints.maxWidth > 775) {
         //controller
         final showText = constraints.maxWidth > 1270;
 
         //basic widget
-        final instagramMenuWidget = showText ? _logoButtonWidget : _MenuBuilderWidget(menu: _instagramMenu, showText: showText);
-        final profileMenuWidget = _MenuBuilderWidget(menu: _profileMenu, showText: showText, child: _profileWidget);
-        final homeMenuWidget = _MenuBuilderWidget(menu: _homeMenu, showText: showText);
-        final searchMenuWidget = _MenuBuilderWidget(menu: _searchMenu, showText: showText);
-        final exploreMenuWidget = _MenuBuilderWidget(menu: _exploreMenu, showText: showText);
-        final reelsMenuWidget = _MenuBuilderWidget(menu: _reelsMenu, showText: showText);
-        final inboxMenuWidget = _MenuBuilderWidget(menu: _inboxMenu, showText: showText);
-        final notificationsMenuWidget = _MenuBuilderWidget(menu: _notificationsMenu, showText: showText);
-        final createPostMenuWidget = _MenuBuilderWidget(menu: _createPostMenu, showText: showText);
-        final threadsMenuWidget = _MenuBuilderWidget(menu: _threadsMenu, showText: showText);
-        final moreMenuWidget = _MenuBuilderWidget(menu: _moreMenu, showText: showText);
+        final instagramMenuWidget = showText ? _logoButtonWidget : _MenuBuilderWidget(menu: _instagramMenu, showText: showText, hasSplash: true);
+        final homeMenuWidget = _MenuBuilderWidget(menu: _homeMenu, showText: showText, hasSplash: true);
+        final searchMenuWidget = _MenuBuilderWidget(menu: _searchMenu, showText: showText, hasSplash: true);
+        final exploreMenuWidget = _MenuBuilderWidget(menu: _exploreMenu, showText: showText, hasSplash: true);
+        final reelsMenuWidget = _MenuBuilderWidget(menu: _reelsMenu, showText: showText, hasSplash: true);
+        final inboxMenuWidget = _MenuBuilderWidget(menu: _inboxMenu, showText: showText, hasSplash: true);
+        final notificationsMenuWidget = _MenuBuilderWidget(menu: _notificationsMenu, showText: showText, hasSplash: true);
+        final createPostMenuWidget = _MenuBuilderWidget(menu: _createPostMenu, showText: showText, hasSplash: true);
+        final profileMenuWidget = _MenuBuilderWidget(menu: _profileMenu, showText: showText, hasSplash: true, child: _profileWidget);
+        final threadsMenuWidget = _MenuBuilderWidget(menu: _threadsMenu, showText: showText, hasSplash: true);
+        final moreMenuWidget = _MenuBuilderWidget(menu: _moreMenu, showText: showText, hasSplash: true);
 
         return Row(
           children: [
             Container(
               width: showText ? 250 : 70,
-              decoration: boxDecoration,
-              child: ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                child: CustomScrollView(
-                  slivers: [
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 25),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (showText) const SizedBox(height: 5),
-                                instagramMenuWidget,
-                                const SizedBox(height: 30),
-                                homeMenuWidget,
-                                const SizedBox(height: 10),
-                                searchMenuWidget,
-                                const SizedBox(height: 10),
-                                exploreMenuWidget,
-                                const SizedBox(height: 10),
-                                reelsMenuWidget,
-                                const SizedBox(height: 10),
-                                inboxMenuWidget,
-                                const SizedBox(height: 10),
-                                notificationsMenuWidget,
-                                const SizedBox(height: 10),
-                                createPostMenuWidget,
-                                const SizedBox(height: 10),
-                                profileMenuWidget,
-                                const SizedBox(height: 10),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                const SizedBox(height: 20),
-                                threadsMenuWidget,
-                                const SizedBox(height: 10),
-                                moreMenuWidget,
-                                const SizedBox(height: 10),
-                              ],
-                            ),
-                          ],
-                        ),
+              decoration: const BoxDecoration(border: Border(right: borderSide)),
+              child: CustomSingleChildScrollViewWidget(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 25),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (showText) const SizedBox(height: 5),
+                          instagramMenuWidget,
+                          const SizedBox(height: 30),
+                          homeMenuWidget,
+                          const SizedBox(height: 10),
+                          searchMenuWidget,
+                          const SizedBox(height: 10),
+                          exploreMenuWidget,
+                          const SizedBox(height: 10),
+                          reelsMenuWidget,
+                          const SizedBox(height: 10),
+                          inboxMenuWidget,
+                          const SizedBox(height: 10),
+                          notificationsMenuWidget,
+                          const SizedBox(height: 10),
+                          createPostMenuWidget,
+                          const SizedBox(height: 10),
+                          profileMenuWidget,
+                          const SizedBox(height: 10),
+                        ],
                       ),
-                    ),
-                  ],
+                      Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          threadsMenuWidget,
+                          const SizedBox(height: 10),
+                          moreMenuWidget,
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -121,33 +115,81 @@ class _NavigationBarShareWidgetState extends State<NavigationBarShareWidget> {
           ],
         );
       }
+      //basic widget
+      final instagramMenuWidget = _logoButtonWidget;
+      final searchFieldWidget = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        width: 270,
+        height: 38,
+        child: SearchPickerFieldCustomWidget(
+          onLoadDropdownItem: (value) async {
+            print('search value: ${value}');
+            await Future.delayed(const Duration(seconds: 2));
+            return [
+              (imageUrl: ImageAsset.defaultProfile, username: 'sittiphansittisak.jobinterview', displayName: 'sittiphan sittisak', isOfficial: true, isFollow: true),
+              (imageUrl: ImageAsset.defaultProfile, username: 'sittiphansittisak.jobinterview', displayName: 'sittiphan sittisak', isOfficial: false, isFollow: false),
+            ];
+          },
+          onChange: (value) {},
+          prefixIcon: Icon(_searchMenu.unselectedIcon, color: const Color.fromRGBO(142, 142, 142, 1)),
+          hintText: _searchMenu.text!,
+          haveClearButton: true,
+          autoRemovePrefixIcon: true,
+          hintStyle: const TextStyle(color: Color.fromRGBO(168, 168, 168, 1), fontSize: 16),
+          borderRadius: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      );
+      final notificationsMenuWidget = _MenuBuilderWidget(menu: _notificationsMenu, isSelected: false);
+      final homeMenuWidget = _MenuBuilderWidget(menu: _homeMenu, isSelected: true);
+      final exploreMenuWidget = _MenuBuilderWidget(menu: _exploreMenu, isSelected: false);
+      final reelsMenuWidget = _MenuBuilderWidget(menu: _reelsMenu, isSelected: false);
+      final createPostMenuWidget = _MenuBuilderWidget(menu: _createPostMenu, isSelected: false);
+      final inboxMenuWidget = _MenuBuilderWidget(menu: _inboxMenu, isSelected: false);
+      final profileMenuWidget = _MenuBuilderWidget(menu: _profileMenu, isSelected: false, child: _profileWidget);
+
       return Column(
         children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              /*_instagramMenuWidget,
-              _notificationsMenuWidget,*/
-            ],
+          Container(
+            height: 60,
+            decoration: const BoxDecoration(border: Border(bottom: borderSide)),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    instagramMenuWidget,
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    searchFieldWidget,
+                    notificationsMenuWidget,
+                  ],
+                ),
+              ],
+            ),
           ),
           if (widget.child != null) widget.child!,
           const Expanded(child: SizedBox(height: 70)),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              /* _homeMenuWidget,
-              const SizedBox(width: 10),
-              _exploreMenuWidget,
-              const SizedBox(width: 10),
-              _reelsMenuWidget,
-              const SizedBox(width: 10),
-              _createPostMenuWidget,
-              const SizedBox(width: 10),
-              _inboxMenuWidget,
-              const SizedBox(width: 10),
-              _profileMenuWidget,
-              const SizedBox(width: 10),*/
-            ],
+          Container(
+            height: 50,
+            decoration: const BoxDecoration(border: Border(top: borderSide)),
+            child: CustomSingleChildScrollViewWidget(
+              isHorizontal: true,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  homeMenuWidget,
+                  exploreMenuWidget,
+                  reelsMenuWidget,
+                  createPostMenuWidget,
+                  inboxMenuWidget,
+                  profileMenuWidget,
+                ],
+              ),
+            ),
           ),
         ],
       );
@@ -160,9 +202,9 @@ class _MenuBuilderWidget extends StatefulWidget {
   final Widget? child;
   final bool isSelected;
   final bool showText;
-  final bool isHorizontal;
+  final bool hasSplash;
 
-  const _MenuBuilderWidget({required this.menu, this.child, this.isSelected = false, this.showText = false, this.isHorizontal = false});
+  const _MenuBuilderWidget({required this.menu, this.child, this.isSelected = false, this.showText = false, this.hasSplash = false});
 
   @override
   State<_MenuBuilderWidget> createState() => _MenuBuilderWidgetState();
@@ -170,35 +212,24 @@ class _MenuBuilderWidget extends StatefulWidget {
 
 class _MenuBuilderWidgetState extends State<_MenuBuilderWidget> {
   //controller
-  bool _isLoading = false;
+  bool _isEnter = false;
   bool? _isTapping = false;
-
-  //widget property
-  Color color = Colors.white;
+  bool _isLoading = false;
 
   Future _setTapping(bool? isTapping) async {
     if (_isTapping == null) return;
     if (isTapping == null) {
       //on click
       if (_isTapping != true) {
-        setState(() {
-          color = Colors.white.withOpacity(0.5);
-          _isTapping = true;
-        });
+        setState(() => _isTapping = true);
       }
       _isTapping = null;
-      await Future.delayed(const Duration(milliseconds: 100));
-      setState(() {
-        color = Colors.white;
-        _isTapping = false;
-      });
+      await Future.delayed(const Duration(milliseconds: 100)); //for smooth animation
+      setState(() => _isTapping = false);
     } else {
       //on tap up/down/cancel
       if (isTapping == _isTapping) return;
-      setState(() {
-        color = isTapping ? Colors.white.withOpacity(0.5) : Colors.white;
-        _isTapping = isTapping;
-      });
+      setState(() => _isTapping = isTapping);
     }
   }
 
@@ -206,12 +237,11 @@ class _MenuBuilderWidgetState extends State<_MenuBuilderWidget> {
     if (_isLoading) return;
     _setTapping(null);
     _isLoading = true;
-
     _isLoading = false;
   }
 
   //widget
-  Widget iconBuilderWidget(Widget child) {
+  Widget iconBuilderWidget({required Widget child, required Color color}) {
     if (!widget.showText || widget.menu.text == null) return child;
     return SizedBox(
       width: 200,
@@ -234,25 +264,34 @@ class _MenuBuilderWidgetState extends State<_MenuBuilderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (tapUpDetails) => _setTapping(true),
-      onTapUp: (tapUpDetails) => _setTapping(false),
-      onTapCancel: () => _setTapping(false),
-      child: IconButton(
-        hoverColor: widget.isHorizontal ? Colors.transparent : null,
-        highlightColor: widget.isHorizontal ? Colors.transparent : null,
-        onPressed: _onClick,
-        tooltip: widget.menu.tooltip,
-        icon: iconBuilderWidget(
-          Transform.scale(
-            scale: (_isTapping ?? true) ? 0.9 : 1.0,
-            child: widget.child ?? Icon(widget.isSelected ? widget.menu.selectedIcon : widget.menu.unselectedIcon),
+    //widget property
+    final color = (_isTapping ?? true) ? Colors.white.withOpacity(0.5) : Colors.white;
+    final scale = (_isTapping ?? true) ? 0.9 : (_isEnter ? 1.1 : 1.0);
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isEnter = true),
+      onExit: (_) => setState(() => _isEnter = false),
+      child: GestureDetector(
+        onTapDown: (tapUpDetails) => _setTapping(true),
+        onTapUp: (tapUpDetails) => _setTapping(false),
+        onTapCancel: () => _setTapping(false),
+        child: IconButton(
+          hoverColor: widget.hasSplash ? null : Colors.transparent,
+          highlightColor: widget.hasSplash ? null : Colors.transparent,
+          onPressed: _onClick,
+          tooltip: widget.menu.tooltip,
+          icon: iconBuilderWidget(
+            child: Transform.scale(
+              scale: scale,
+              child: widget.child ?? Icon(widget.isSelected ? widget.menu.selectedIcon : widget.menu.unselectedIcon),
+            ),
+            color: color,
           ),
+          color: color,
+          iconSize: 25,
+          padding: const EdgeInsets.all(10),
+          style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
         ),
-        color: color,
-        iconSize: 25,
-        padding: const EdgeInsets.all(10),
-        style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
       ),
     );
   }
