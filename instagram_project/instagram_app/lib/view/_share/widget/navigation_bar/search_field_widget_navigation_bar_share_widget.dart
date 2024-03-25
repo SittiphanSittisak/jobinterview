@@ -284,18 +284,18 @@ class _SearchFieldWidgetNavigationBarShareWidgetState extends State<SearchFieldW
   late final _dropdownItemLoadingWidget = SizedBox(width: suffixSize, height: suffixSize, child: CircularProgressIndicator(strokeWidth: 1, color: suffixColor));
 
   @override
-  void didChangeDependencies() {
-    _navigatorState = Navigator.of(context);
-    super.didChangeDependencies();
-  }
-
-  @override
   void initState() {
     super.initState();
     _focusNode.addListener(() {
       if (_removePrefixIcon()) setState(() {});
       if (_focusNode.hasFocus) _showPopupMenu();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    _navigatorState = Navigator.of(context);
+    super.didChangeDependencies();
   }
 
   @override

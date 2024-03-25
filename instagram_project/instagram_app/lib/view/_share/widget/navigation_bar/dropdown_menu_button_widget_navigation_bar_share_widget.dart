@@ -10,6 +10,7 @@ class DropdownMenuButtonWidgetNavigationBarShareWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     //widget property
     const parentPaddingSize = 15.0;
+    final dialogBorderRadius = BorderRadius.circular(7);
     const menuWidth = 170.0;
     const menuHeight = 40.0;
     ({double left, double top}) getPosition() {
@@ -27,9 +28,9 @@ class DropdownMenuButtonWidgetNavigationBarShareWidget extends StatelessWidget {
       ),
     );
     final dialogWidget = ClipRRect(
-      borderRadius: BorderRadius.circular(7),
+      borderRadius: dialogBorderRadius,
       child: Material(
-        borderRadius: BorderRadius.circular(7),
+        borderRadius: dialogBorderRadius,
         child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

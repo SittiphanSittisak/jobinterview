@@ -3,3 +3,4 @@ instagram_project: instagram_app -> update navigationBarShareWidget view (vertic
 instagram_project: instagram_app -> update navigationBarShareWidget view (big screen finish) = https://youtu.be/MPvYbj8aiNA
 instagram_project: instagram_app -> update navigationBarShareWidget view (small screen in process) = https://youtu.be/Zt7ZrhnK79A
 instagram_project: instagram_app -> update navigationBarShareWidget view (add position dialog widget) = https://youtu.be/dncNmIkh6hM
+instagram_project: instagram_app -> update navigationBarShareWidget view (add more menu dialog) = https://youtu.be/5rriFbAExd0
