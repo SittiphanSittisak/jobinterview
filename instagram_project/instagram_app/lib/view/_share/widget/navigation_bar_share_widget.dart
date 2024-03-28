@@ -4,11 +4,12 @@ import 'package:instagram_app/_lib/asset/image_asset.dart';
 import 'package:instagram_app/_lib/custom_widget/custom_single_child_scroll_view_widget.dart';
 import 'package:instagram_app/_lib/custom_widget/image_button_blinking_custom_widget.dart';
 import 'package:instagram_app/_lib/custom_widget/image_custom_widget.dart';
-import 'package:instagram_app/_lib/custom_widget/text_button_blinking_custom_widget.dart';
-import 'package:instagram_app/view/_share/utility/widget_converter.dart';
 import 'package:instagram_app/view/_share/widget/navigation_bar/menu_widget_navigation_bar_share_widget.dart';
 import 'package:instagram_app/view/_share/widget/navigation_bar/dropdown_menu_button_widget_navigation_bar_share_widget.dart';
 import 'package:instagram_app/view/_share/widget/navigation_bar/search_field_widget_navigation_bar_share_widget.dart';
+import 'package:instagram_app/view/_share/widget/navigation_bar/show_create_post_menu_dialog_widget_navigation_bar_share_widget.dart';
+import 'package:instagram_app/view/_share/widget/navigation_bar/show_more_menu_dialog_widget_navigation_bar_share_widget.dart';
+import 'package:instagram_app/view/_share/widget/navigation_bar/show_search_menu_overlay_entry_widget_navigation_bar_share_widget.dart';
 
 class NavigationBarShareWidget extends StatefulWidget {
   final Widget? child;
@@ -19,7 +20,7 @@ class NavigationBarShareWidget extends StatefulWidget {
   State<NavigationBarShareWidget> createState() => _NavigationBarShareWidgetState();
 }
 
-class _NavigationBarShareWidgetState extends State<NavigationBarShareWidget> {
+class _NavigationBarShareWidgetState extends State<NavigationBarShareWidget> with SingleTickerProviderStateMixin {
   //data
   ({String? tooltip, String? text, IconData unselectedIcon, IconData selectedIcon}) menuBuilderData({required String? tooltip, required String? text, required IconData unselectedIcon, required IconData selectedIcon}) => (tooltip: tooltip, text: text, unselectedIcon: unselectedIcon, selectedIcon: selectedIcon);
 
@@ -35,6 +36,9 @@ class _NavigationBarShareWidgetState extends State<NavigationBarShareWidget> {
   late final _threadsMenu = menuBuilderData(tooltip: '', text: 'Threads', unselectedIcon: FontAwesomeIcons.threads, selectedIcon: FontAwesomeIcons.threads);
   late final _moreMenu = menuBuilderData(tooltip: 'การตั้งค่า', text: 'เพิ่มเติม', unselectedIcon: Icons.menu_outlined, selectedIcon: Icons.menu);
 
+  //controller
+  late final _searchAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+
   //basic widget
   final _logoButtonWidget = Container(
     padding: const EdgeInsets.all(10),
@@ -42,6 +46,12 @@ class _NavigationBarShareWidgetState extends State<NavigationBarShareWidget> {
     child: Tooltip(message: 'Instagram', child: ImageButtonBlinkingCustomWidget(image: ImageAsset.logo, onTap: () {}, color: Colors.white)),
   );
   final _profileWidget = const ClipOval(child: SizedBox(width: 25, child: ImageCustomWidget(image: ImageAsset.defaultProfile)));
+
+  @override
+  void deactivate() {
+    _searchAnimationController.dispose();
+    super.deactivate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,141 +63,47 @@ class _NavigationBarShareWidgetState extends State<NavigationBarShareWidget> {
         //controller
         final isBigScreen = constraints.maxWidth > 1270;
 
+        //widget property
+        final barWidth = isBigScreen ? 250.0 : 70.0;
+
         //basic widget
-        final instagramMenuWidget = isBigScreen ? _logoButtonWidget : MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: () {}, menu: _instagramMenu);
-        final homeMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: () {}, menu: _homeMenu);
-        final searchMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: () {}, menu: _searchMenu);
-        final exploreMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: () {}, menu: _exploreMenu);
-        final reelsMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: () {}, menu: _reelsMenu);
-        final inboxMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: () {}, menu: _inboxMenu);
-        final notificationsMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: () {}, menu: _notificationsMenu);
-        final createPostMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: () {}, menu: _createPostMenu);
-        final profileMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: () {}, menu: _profileMenu, child: _profileWidget);
-        final threadsMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: () {}, menu: _threadsMenu);
-        final moreMenuWidget = MenuWidgetNavigationBarShareWidget(
+        //using Key for auto close dialog when isBigScreen changed.
+        final instagramMenuWidget = isBigScreen ? _logoButtonWidget : MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: (_) {}, menu: _instagramMenu);
+        final homeMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: (_) {}, menu: _homeMenu);
+        final searchMenuWidget = MenuWidgetNavigationBarShareWidget(
+          key: Key('searchMenuWidget$isBigScreen'),
           hasSplash: true,
           showText: isBigScreen,
-          hasDialog: true,
-          onClick: () => showGeneralDialog(
-            context: context,
-            barrierDismissible: true,
-            barrierLabel: '',
-            barrierColor: Colors.transparent,
-            transitionDuration: const Duration(milliseconds: 200),
-            pageBuilder: (BuildContext buildContext, Animation<double> animation1, Animation<double> animation2) {
-              //data
-              final textFieldRenderBox = context.findRenderObject() as RenderBox;
-              final textFieldOffset = textFieldRenderBox.localToGlobal(Offset.zero);
-
-              //widget property
-              const paddingSize = 7.0;
-              final borderRadius = BorderRadius.circular(15);
-              const dialogWidth = 250.0;
-              const menuBgColor = Color.fromRGBO(38, 38, 38, 1);
-              const textIconColor = Color.fromRGBO(246, 246, 246, 1);
-
-              //basic widget
-              Widget menuBuilderWidget({required String text, IconData? icon, required Function() onTap}) {
-                return Ink(
-                  padding: const EdgeInsets.symmetric(horizontal: paddingSize),
-                  width: dialogWidth,
-                  height: 50,
-                  color: menuBgColor,
-                  child: TextButtonBlinkingCustomWidget(
-                    isBlinkTextWhenHover: false,
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.all(15),
-                    borderRadius: BorderRadius.circular(8),
-                    hoverColor: const Color.fromRGBO(60, 60, 60, 1),
-                    text: text,
-                    prefixIcon: icon,
-                    textColor: textIconColor,
-                    iconColor: textIconColor,
-                    fontSize: 15,
-                    iconSize: 20,
-                    onTap: onTap,
-                  ),
-                );
-              }
-
-              Widget dividerBuilderWidget({required double height, required double thickness}) {
-                return SizedBox(
-                  width: dialogWidth,
-                  child: Divider(
-                    height: height,
-                    thickness: thickness,
-                    color: const Color.fromRGBO(53, 53, 53, 1),
-                  ),
-                );
-              }
-
-              return Align(
-                alignment: WidgetConverter.positionToAlignment(
-                  context: context,
-                  left: textFieldOffset.dx + (isBigScreen ? 17 : 80),
-                  top: textFieldOffset.dy + textFieldRenderBox.size.height - (isBigScreen ? 160 : 50),
-                ),
-                child: ClipRRect(
-                  borderRadius: borderRadius,
-                  child: Material(
-                    borderRadius: borderRadius,
-                    child: Ink(
-                      padding: const EdgeInsets.symmetric(vertical: paddingSize),
-                      color: menuBgColor,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          menuBuilderWidget(
-                            text: 'การตั้งค่า',
-                            icon: Icons.settings,
-                            onTap: () => print('การตั้งค่า'),
-                          ),
-                          menuBuilderWidget(
-                            text: 'กิจกรรมของคุณ',
-                            icon: Icons.broken_image_outlined,
-                            onTap: () => print('กิจกรรมของคุณ'),
-                          ),
-                          menuBuilderWidget(
-                            text: 'บันทึกไว้',
-                            icon: Icons.bookmark_border,
-                            onTap: () => print('บันทึกไว้'),
-                          ),
-                          menuBuilderWidget(
-                            text: 'สลับโหมด',
-                            icon: FontAwesomeIcons.moon,
-                            onTap: () => print('สลับโหมด'),
-                          ),
-                          menuBuilderWidget(
-                            text: 'รายงานบัญชี',
-                            icon: Icons.report_gmailerrorred,
-                            onTap: () => print('รายงานบัญชี'),
-                          ),
-                          dividerBuilderWidget(height: 20, thickness: 5),
-                          menuBuilderWidget(
-                            text: 'สลับบัญชี',
-                            onTap: () => print('สลับบัญชี'),
-                          ),
-                          dividerBuilderWidget(height: 17, thickness: 2),
-                          menuBuilderWidget(
-                            text: 'ออกจากระบบ',
-                            onTap: () => print('ออกจากระบบ'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-          menu: _moreMenu,
+          menu: _searchMenu,
+          onClick: (_) async {
+            if (!context.mounted) return;
+            _searchAnimationController.isCompleted ? await _searchAnimationController.reverse() : await _searchAnimationController.forward();
+          },
+          onDispose: (_) {
+            if (!_searchAnimationController.isCompleted) return;
+            _searchAnimationController.reverse();
+          },
         );
+        final exploreMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: (_) {}, menu: _exploreMenu);
+        final reelsMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: (_) {}, menu: _reelsMenu);
+        final inboxMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: (_) {}, menu: _inboxMenu);
+        final notificationsMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: (_) {}, menu: _notificationsMenu);
+        final createPostMenuWidget = MenuWidgetNavigationBarShareWidget(key: Key('createPostMenuWidget$isBigScreen'), hasSplash: true, showText: isBigScreen, showDialog: (context) => showCreatePostMenuDialogWidgetNavigationBarShareWidget(context: context ?? this.context, size: isBigScreen ? const Size(590, 640) : const Size(500, 550)), menu: _createPostMenu);
+        final profileMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: (_) {}, menu: _profileMenu, child: _profileWidget);
+        final threadsMenuWidget = MenuWidgetNavigationBarShareWidget(hasSplash: true, showText: isBigScreen, onClick: (_) {}, menu: _threadsMenu);
+        final moreMenuWidget = MenuWidgetNavigationBarShareWidget(key: Key('moreMenuWidget$isBigScreen'), hasSplash: true, showText: isBigScreen, showDialog: (context) => showMoreMenuDialogWidgetNavigationBarShareWidget(context: context ?? this.context, isBigScreen: isBigScreen), menu: _moreMenu);
+        final searchMenuCardWidget = ShowSearchMenuOverlayEntryWidgetNavigationBarShareWidget(animationController: _searchAnimationController, leftSpace: barWidth);
 
-        return Row(
+        return Stack(
           children: [
+            if (widget.child != null) Padding(padding: EdgeInsets.only(left: barWidth), child: widget.child!),
+            Padding(padding: EdgeInsets.only(left: barWidth), child: searchMenuCardWidget),
             Container(
-              width: isBigScreen ? 250 : 70,
-              decoration: const BoxDecoration(border: Border(right: borderSide)),
+              width: barWidth,
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(0, 0, 0, 1),
+                border: Border(right: borderSide),
+              ),
               child: CustomSingleChildScrollViewWidget(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 25),
@@ -232,7 +148,6 @@ class _NavigationBarShareWidgetState extends State<NavigationBarShareWidget> {
                 ),
               ),
             ),
-            if (widget.child != null) widget.child!,
           ],
         );
       } else {
@@ -264,13 +179,13 @@ class _NavigationBarShareWidgetState extends State<NavigationBarShareWidget> {
             borderRadius: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
           ),
         );
-        final notificationsMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, onClick: () {}, menu: _notificationsMenu);
-        final homeMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: true, onClick: () {}, menu: _homeMenu);
-        final exploreMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, onClick: () {}, menu: _exploreMenu);
-        final reelsMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, onClick: () {}, menu: _reelsMenu);
-        final createPostMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, onClick: () {}, menu: _createPostMenu);
-        final inboxMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, onClick: () {}, menu: _inboxMenu);
-        final profileMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, onClick: () {}, menu: _profileMenu, child: _profileWidget);
+        final notificationsMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, onClick: (_) {}, menu: _notificationsMenu);
+        final homeMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: true, onClick: (_) {}, menu: _homeMenu);
+        final exploreMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, onClick: (_) {}, menu: _exploreMenu);
+        final reelsMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, onClick: (_) {}, menu: _reelsMenu);
+        final createPostMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, showDialog: (context) => showCreatePostMenuDialogWidgetNavigationBarShareWidget(context: context ?? this.context, size: const Size(350, 400)), menu: _createPostMenu);
+        final inboxMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, onClick: (_) {}, menu: _inboxMenu);
+        final profileMenuWidget = MenuWidgetNavigationBarShareWidget(isSelected: false, onClick: (_) {}, menu: _profileMenu, child: _profileWidget);
 
         return Column(
           children: [

@@ -4,3 +4,4 @@ instagram_project: instagram_app -> update navigationBarShareWidget view (big sc
 instagram_project: instagram_app -> update navigationBarShareWidget view (small screen in process) = https://youtu.be/Zt7ZrhnK79A
 instagram_project: instagram_app -> update navigationBarShareWidget view (add position dialog widget) = https://youtu.be/dncNmIkh6hM
 instagram_project: instagram_app -> update navigationBarShareWidget view (add more menu dialog) = https://youtu.be/5rriFbAExd0
+instagram_project: instagram_app -> update navigationBarShareWidget view (add create post widget and search widget) = https://youtu.be/KkI0DBXs0pk

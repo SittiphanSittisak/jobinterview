@@ -4,9 +4,11 @@ class MenuWidgetNavigationBarShareWidget extends StatefulWidget {
   final bool isSelected;
   final bool showText;
   final bool hasSplash;
-  final bool hasDialog;
-  final Function()? onClick;
   final ({String? tooltip, String? text, IconData unselectedIcon, IconData selectedIcon}) menu;
+  final bool protectLoading;
+  final Function(bool isLoading)? onClick;
+  final Function(BuildContext? context)? showDialog;
+  final Function(bool isLoading)? onDispose;
   final Widget? child;
 
   const MenuWidgetNavigationBarShareWidget({
@@ -14,9 +16,11 @@ class MenuWidgetNavigationBarShareWidget extends StatefulWidget {
     this.isSelected = false,
     this.showText = false,
     this.hasSplash = false,
-    this.hasDialog = false,
-    required this.onClick,
     required this.menu,
+    this.protectLoading = true,
+    this.onClick,
+    this.showDialog,
+    this.onDispose,
     this.child,
   });
 
@@ -27,6 +31,7 @@ class MenuWidgetNavigationBarShareWidget extends StatefulWidget {
 class _MenuWidgetNavigationBarShareWidgetState extends State<MenuWidgetNavigationBarShareWidget> {
   //controller
   late NavigatorState _navigatorState;
+  late final _hasDialog = widget.showDialog != null;
   bool _isEnter = false;
   bool? _isTapping = false;
   bool _isLoading = false;
@@ -49,10 +54,11 @@ class _MenuWidgetNavigationBarShareWidgetState extends State<MenuWidgetNavigatio
   }
 
   Future _onClick() async {
-    if (_isLoading) return;
+    if (widget.protectLoading && _isLoading) return;
     _setTapping(null);
     _isLoading = true;
-    await widget.onClick?.call();
+    await widget.onClick?.call(_isLoading);
+    if (_hasDialog) await widget.showDialog!.call(context.mounted ? context : null);
     _isLoading = false;
   }
 
@@ -80,13 +86,14 @@ class _MenuWidgetNavigationBarShareWidgetState extends State<MenuWidgetNavigatio
 
   @override
   void didChangeDependencies() {
-    if (widget.hasDialog) _navigatorState = Navigator.of(context);
+    if (_hasDialog) _navigatorState = Navigator.of(context);
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    if (widget.hasDialog && _isLoading && _navigatorState.mounted) _navigatorState.maybePop();
+    if (_hasDialog && _isLoading && _navigatorState.mounted) _navigatorState.maybePop();
+    widget.onDispose?.call(_isLoading);
     super.dispose();
   }
 

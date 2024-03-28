@@ -243,7 +243,7 @@ class _SearchFieldWidgetNavigationBarShareWidgetState extends State<SearchFieldW
     );
     if (!_isDropdownItemShow || _isDispose) return;
     await Future.delayed(Duration.zero, () => _isDropdownItemShow = false); //protect auto open dialog from listener.
-    if (_removePrefixIcon()) setState(() {});
+    if (context.mounted && _removePrefixIcon()) setState(() {});
   }
 
   Future _onLoadDropdownItem(String value) async {
@@ -253,22 +253,24 @@ class _SearchFieldWidgetNavigationBarShareWidgetState extends State<SearchFieldW
       Navigator.of(context).pop();
     }
     final now = _lastTypeAt;
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500)); //delay for typing
     if (!now.isAtSameMomentAs(_lastTypeAt)) return;
 
     if (_isDropdownItemLoading) return;
-    setState(() => _isDropdownItemLoading = true);
+    if (context.mounted) setState(() => _isDropdownItemLoading = true);
     _lastData = await widget.onLoadDropdownItem!(value);
     _showPopupMenu();
-    setState(() => _isDropdownItemLoading = false);
+    if (context.mounted) setState(() => _isDropdownItemLoading = false);
   }
 
   Future _onChange(String value, {bool isLoadDropdownItem = false}) async {
     _lastTypeAt = DateTime.now();
     widget.onChange?.call(value);
     if (!isLoadDropdownItem) _onLoadDropdownItem(value);
-    if (_switchHintToLabel(value)) setState(() {});
-    if (_removePrefixIcon()) setState(() {});
+    if (context.mounted) {
+      if (_switchHintToLabel(value)) setState(() {});
+      if (_removePrefixIcon()) setState(() {});
+    }
   }
 
   //widget property
@@ -280,7 +282,6 @@ class _SearchFieldWidgetNavigationBarShareWidgetState extends State<SearchFieldW
     onTap: _clearText,
     child: Icon(FontAwesomeIcons.solidCircleXmark, size: suffixSize, color: suffixColor),
   );
-
   late final _dropdownItemLoadingWidget = SizedBox(width: suffixSize, height: suffixSize, child: CircularProgressIndicator(strokeWidth: 1, color: suffixColor));
 
   @override
